@@ -10,13 +10,22 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const USER_ADMIN = 'true';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'nick',
+        'profile_id',
+        'name',
+        'email',
+        'password',
+        'description',
+        'photo',
+        'enabled'
     ];
 
     /**
@@ -36,6 +45,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtolower($value);
+    }
+
+
+    public function getNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
 
 
     /**
@@ -95,5 +122,11 @@ class User extends Authenticatable
     public function follower()
     {
         return $this->belongsToMany('App\User', 'follows', 'following', 'user_id');
+    }
+
+
+    public function isAdmin()
+    {
+        return $this->profile == User::USER_ADMIN;
     }
 }
