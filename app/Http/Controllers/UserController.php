@@ -7,7 +7,7 @@ use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -18,17 +18,7 @@ class UserController extends Controller
     {
         $users = User::all();
 
-        return response()->json(['data' => $users], 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->showAll($users);
     }
 
     /**
@@ -57,7 +47,7 @@ class UserController extends Controller
 
         $user = User::create($userData);
 
-        return response()->json(['data' => $user], 201);
+        return $this->showOne($user, 201);
     }
 
     /**
@@ -70,7 +60,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user);
     }
 
     /**
@@ -102,15 +92,12 @@ class UserController extends Controller
         }
 
         if (!$user->isDirty()) {
-            return response()->json([
-                'error' => 'Se debe especificar al menos un valor diferente para actulizar',
-                'code' => 422
-            ], 422);
+            return $this->errorResponse('Se debe especificar al menos un valor diferente para actulizar', 422);
         }
 
         $user->save();
 
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user);
     }
 
     /**
@@ -124,6 +111,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user);
     }
 }
