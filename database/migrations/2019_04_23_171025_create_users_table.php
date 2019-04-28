@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->text('description')->nullable();
             $table->tinyInteger('enabled');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('profile_id')
                   ->references('id')->on('profiles')

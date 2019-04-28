@@ -104,7 +104,6 @@ class UserController extends ApiController
      */
     public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
         $user->delete();
 
         return $this->showOne($user);
