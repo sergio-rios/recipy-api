@@ -11,8 +11,6 @@ class User extends Authenticatable
 {
     use Notifiable, SoftDeletes;
 
-    const USER_ADMIN = 'true';
-
     protected $dates = ['deleted_at'];
 
     /**
@@ -28,7 +26,9 @@ class User extends Authenticatable
         'password',
         'description',
         'photo',
-        'enabled'
+        'enabled',
+        'verified',
+        'verification_email_token'
     ];
 
     /**
@@ -37,7 +37,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'verification_email_token',
     ];
 
     /**
@@ -65,6 +65,12 @@ class User extends Authenticatable
     public function setEmailAttribute($value)
     {
         $this->attributes['email'] = strtolower($value);
+    }
+    
+
+    public static function generateEmailToken()
+    {
+        return str_random(45);
     }
 
 
@@ -130,6 +136,6 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->profile == User::USER_ADMIN;
+        return $this->profile == 1;
     }
 }

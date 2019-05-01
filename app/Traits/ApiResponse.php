@@ -51,4 +51,14 @@ trait ApiResponse
     {
         return $this->successResponse(['data' => $instance], $code);
     }
+
+    /**
+     * Returns a successful JSON response with a message.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    protected function showMessage($msg, $code = 200)
+    {
+        return $this->successResponse(['data' => $msg], $code);
+    }
 }

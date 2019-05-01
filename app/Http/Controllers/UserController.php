@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Profile;
 use Illuminate\Http\Request;
+use App\Events\UserWasRegistered;
+use App\Events\UserEmailHasChanged;
 use Illuminate\Support\Facades\Input;
 
 class UserController extends ApiController
@@ -35,8 +37,7 @@ class UserController extends ApiController
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:4|confirmed',
             'description' => 'string',
-            'photo' => 'image|mimes:jpeg,jpg,png|max:10000',
-            'enabled' => 'required|boolean'
+            'photo' => 'image|mimes:jpeg,jpg,png|max:10000'
         ]);
 
         $defaultProfile = Profile::where('profile', 'user')->first();
@@ -44,8 +45,13 @@ class UserController extends ApiController
         $userData = $request->all();
         $userData['password'] = bcrypt($request->password);
         $userData['profile_id'] = $defaultProfile->id;
+        $userData['verified'] = 0;
+        $userData['enabled'] = 1;
+        $userData['verification_email_token'] = User::generateEmailToken();
+        
+        $user = User::create($userData);       
 
-        $user = User::create($userData);
+        event(new UserWasRegistered($user));
 
         return $this->showOne($user, 201);
     }
@@ -87,6 +93,12 @@ class UserController extends ApiController
             $user->password = bcrypt($request->password);
         }
 
+        if ($request->has('email')) {
+            $user->verified = 0;
+            $user->verification_email_token = User::generateEmailToken();
+            event(new UserEmailHasChanged($user));
+        }
+
         if (!$user->isDirty()) {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actulizar', 422);
         }
@@ -107,5 +119,27 @@ class UserController extends ApiController
         $user->delete();
 
         return $this->showOne($user);
+    }
+
+    public function verify($token)
+    {
+        $user = User::where('verification_email_token', $token)->firstOrFail();
+
+        $user->verified = 1;
+        $user->verification_email_token = null;
+        $user->save();
+
+        return $this->showMessage('La cuenta ha sido verificada');
+    }
+
+    public function resend(User $user)
+    {
+        if ($user->verified == 1) {
+            return $this->errorResponse('El usuario ya está verificado', 409);
+        }
+
+        event(new UserWasRegistered($user));
+        
+        return $this->showMessage('El email de verificación ha sido reenviado');
     }
 }

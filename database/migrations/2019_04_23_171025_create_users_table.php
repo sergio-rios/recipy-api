@@ -27,6 +27,8 @@ class CreateUsersTable extends Migration
             $table->string('photo')->nullable();
             $table->text('description')->nullable();
             $table->tinyInteger('enabled');
+            $table->tinyInteger('verified');
+            $table->string('verification_email_token')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::resource('user', 'UserController', [
     'except' => ['edit', 'create']
 ]);
+
+Route::get('user/verify-email/{token}', 'UserController@verify')->name('verify');
+Route::get('user/{user}/resend-verification', 'UserController@resend')->name('resend');
