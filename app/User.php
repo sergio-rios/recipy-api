@@ -2,12 +2,13 @@
 
 namespace App;
 
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, SoftDeletes;
 
@@ -133,9 +134,48 @@ class User extends Authenticatable
         return $this->belongsToMany('App\User', 'follows', 'following', 'user_id');
     }
 
+    /**
+     * Check if the user has one of the roles
+     * @param array $roles
+     * @return boolean
+     */
+    public function hasProfile(array $profiles)
+    {
+        $userProfile = $this->profile()->get()->pluck('profile')->first();
+        foreach ($profiles as $profile) {
+            if ($userProfile == $profile) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    /**
+     * Check if it's a admin user
+     * @return boolean
+     */
     public function isAdmin()
     {
-        return $this->profile == 1;
+        return $this->hasProfile(['admin']);
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

@@ -19,3 +19,6 @@ Route::resource('user', 'UserController', [
 
 Route::get('user/verify-email/{token}', 'UserController@verify')->name('verify');
 Route::get('user/{user}/resend-verification', 'UserController@resend')->name('resend');
+
+Route::post('login', 'AuthController@login')->name('login')
+                                            ->middleware('api');

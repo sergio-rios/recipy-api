@@ -8,9 +8,20 @@ use Illuminate\Http\Request;
 use App\Events\UserWasRegistered;
 use App\Events\UserEmailHasChanged;
 use Illuminate\Support\Facades\Input;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class UserController extends ApiController
 {
+    /**
+     * Create a new UserController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['store', 'resend']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -76,6 +87,8 @@ class UserController extends ApiController
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize($user);
+        
         $validate = $this->validate($request, [
             'nick' => 'string|max:255|unique:users,nick,'.$user->id,
             'profile' => 'integer',
