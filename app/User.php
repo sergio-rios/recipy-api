@@ -50,6 +50,11 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    public function setNickAttribute($value)
+    {
+        $this->attributes['nick'] = strtolower($value);
+    }
+
 
     public function setNameAttribute($value)
     {
@@ -126,7 +131,7 @@ class User extends Authenticatable implements JWTSubject
 
 
     /**
-     * Relationship with message table (Received messages)
+     * Relationship with follows table
      * @return User
      */
     public function follower()

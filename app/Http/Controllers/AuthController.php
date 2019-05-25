@@ -28,15 +28,16 @@ class AuthController extends ApiController
     {
         $credentials = request(['email', 'password']);
 
+        //dd($credentials);
+
         if (! $token = auth()->attempt($credentials)) {
-            $this->errorResponse('Usuario o contraseña invalidos', 401);
+            return $this->errorResponse('Unauthorized', 401);
         }
 
         $response['token'] = $token;
         $response['user'] = auth()->user();
 
-        return response()->json($response, 200);
-        return $this->successResponse($response);        
+        return $this->successResponse($response);      
     }
 
     /**

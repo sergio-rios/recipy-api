@@ -12,7 +12,7 @@ trait ApiResponse
      *
      * @return \Illuminate\Http\Response
      */
-    private function successResponse($data, $code = 200)
+    protected function successResponse($data, $code = 200)
     {
         return response()->json($data, $code);
     }
@@ -49,7 +49,7 @@ trait ApiResponse
      */
     protected function showOne(Model $instance, $code = 200)
     {
-        return $this->successResponse(['data' => $instance], $code);
+        return $this->successResponse($instance, $code);
     }
 
     /**

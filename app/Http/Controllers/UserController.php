@@ -75,6 +75,9 @@ class UserController extends ApiController
      */
     public function show(User $user)
     {
+        $user['post'] = $user->post;
+        $user['following'] = $user->following;
+        $user['follower'] = $user->follower;
         return $this->showOne($user);
     }
 
@@ -95,8 +98,8 @@ class UserController extends ApiController
             'name' => 'string|max:255|regex:#^[A-Za-zÁÉÍÓÚñáéíóúÑ\s]+$#',           
             'email' => 'string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'string|min:4|confirmed',
-            'description' => 'string',
-            'photo' => 'image|mimes:jpeg,jpg,png|max:10000',
+            'description' => 'string|nullable',
+            'photo' => 'image|nullable|mimes:jpeg,jpg,png|max:10000',
             'enabled' => 'boolean'
         ]);
         
@@ -134,6 +137,12 @@ class UserController extends ApiController
         return $this->showOne($user);
     }
 
+    /**
+     * Verifies the specified resource.
+     *
+     * @param  string  $token
+     * @return \Illuminate\Http\Response
+     */
     public function verify($token)
     {
         $user = User::where('verification_email_token', $token)->firstOrFail();
@@ -145,6 +154,12 @@ class UserController extends ApiController
         return $this->showMessage('La cuenta ha sido verificada');
     }
 
+    /**
+     * Resend the verification email for a specified resource.
+     *
+     * @param  string  $token
+     * @return \Illuminate\Http\Response
+     */
     public function resend(User $user)
     {
         if ($user->verified == 1) {
