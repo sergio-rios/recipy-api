@@ -31,6 +31,6 @@ class UserWelcome extends Mailable
      */
     public function build()
     {
-        return $this->text('email.welcome')->subject('Recipy | Verifica tu cuenta');
+        return $this->view('email.welcome')->subject('Recipy | Verifica tu cuenta');
     }
 }

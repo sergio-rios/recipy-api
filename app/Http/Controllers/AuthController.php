@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ApiController;
@@ -27,17 +28,24 @@ class AuthController extends ApiController
     public function login(Request $request)
     {
         $credentials = request(['email', 'password']);
+        $user = User::where(['email' => $request->email])->first();
 
-        //dd($credentials);
-
-        if (! $token = auth()->attempt($credentials)) {
-            return $this->errorResponse('Unauthorized', 401);
+        if (!isset($user)) {
+            return $this->errorResponse('unauthorized_email', 401);
         }
-
-        $response['token'] = $token;
-        $response['user'] = auth()->user();
-
-        return $this->successResponse($response);      
+        elseif ($user->verified) {
+            if (! $token = auth()->attempt($credentials)) {
+                return $this->errorResponse('unauthorized_pass', 401);
+            }
+    
+            $response['token'] = $token;
+            $response['user'] = auth()->user();
+    
+            return $this->successResponse($response);
+        }
+        else {
+            return $this->errorResponse('verified', 403);
+        }
     }
 
     /**
