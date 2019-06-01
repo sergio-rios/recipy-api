@@ -17,6 +17,14 @@ Route::resource('user', 'UserController', [
     'except' => ['edit', 'create']
 ]);
 
+Route::resource('post', 'PostController', [
+    'except' => ['index', 'edit', 'create']
+]);
+
+Route::resource('like', 'LikeController', [
+    'only' => ['store', 'destroy']
+]);
+
 Route::get('user/verify-email/{token}', 'UserController@verify')->name('verify');
 Route::get('user/{user}/resend-verification', 'UserController@resend')->name('resend');
 

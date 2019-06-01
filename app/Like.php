@@ -19,6 +19,16 @@ class Like extends Model
      */
     public $timestamps = true;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'post_id',
+        'user_id'
+    ];
+
 
     /**
      * Relationship with users table

@@ -19,6 +19,18 @@ class Post extends Model
      */
     public $timestamps = true;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title',
+        'description',
+        'photo',
+        'user_id'
+    ];
+
 
     /**
      * Relationship with users table
@@ -46,6 +58,15 @@ class Post extends Model
      */
     public function like()
     {
-        return $this->hasMany('App\Likes');
+        return $this->hasMany('App\Like');
+    }
+
+    /**
+     * Relationship with likes table
+     * @return Tag
+     */
+    public function tag()
+    {
+        return $this->belongsToMany('App\Tag');
     }
 }
