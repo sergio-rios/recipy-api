@@ -21,6 +21,10 @@ Route::resource('post', 'PostController', [
     'except' => ['index', 'edit', 'create']
 ]);
 
+Route::resource('comment', 'CommentController', [
+    'only' => ['store', 'show', 'destroy']
+]);
+
 Route::resource('like', 'LikeController', [
     'only' => ['store', 'destroy']
 ]);
