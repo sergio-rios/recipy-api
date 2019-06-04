@@ -17,7 +17,13 @@ class Tag extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['id', 'name'];
+
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtolower($value);
+    }
 
     /**
      * Relationship with follows table
@@ -25,6 +31,6 @@ class Tag extends Model
      */
     public function post()
     {
-        return $this->belongsToMany('App\Post');
+        return $this->belongsToMany('App\Post', 'post_tags');
     }
 }

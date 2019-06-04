@@ -42,17 +42,20 @@ class PostController extends ApiController
     {
         $validate = $this->validate($request, [
             'title' => 'required|string|max:255',
+            'tags' => 'required',
             'description' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,jpg,png|max:10000'
         ]);
 
         $user = auth()->user();
-        $postData = $request->all();
-        $postData['user_id'] = $user->id;        
-
+        $postData['user_id'] = $user->id; 
+        $postData['title'] = $request->title;
+        $postData['description'] = $request->description;
+        $tags = $request->tags;
         $post = Post::create($postData);
+        $post->tag()->attach($tags);
 
-        return $this->showOne($post, 201);
+        return $this->successResponse($post, 201);
     }
 
     /**

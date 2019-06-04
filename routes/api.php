@@ -29,6 +29,10 @@ Route::resource('like', 'LikeController', [
     'only' => ['store', 'destroy']
 ]);
 
+Route::resource('tag', 'TagController', [
+    'only' => ['store', 'index']
+]);
+
 Route::get('user/verify-email/{token}', 'UserController@verify')->name('verify');
 Route::get('user/{user}/resend-verification', 'UserController@resend')->name('resend');
 
