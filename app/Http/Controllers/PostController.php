@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
 use App\Like;
+use App\Post;
 use App\User;
 use App\Comment;
 use Illuminate\Http\Request;
@@ -23,16 +23,6 @@ class PostController extends ApiController
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -44,7 +34,7 @@ class PostController extends ApiController
             'title' => 'required|string|max:255',
             'tags' => 'required',
             'description' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,jpg,png|max:10000'
+            'image' => 'nullable'
         ]);
 
         $user = auth()->user();
@@ -52,6 +42,11 @@ class PostController extends ApiController
         $postData['title'] = $request->title;
         $postData['description'] = $request->description;
         $tags = $request->tags;
+
+        if (isset($postData['image'])) {
+            $postData['image'] = $request->image;
+        }
+
         $post = Post::create($postData);
         $post->tag()->attach($tags);
 
@@ -69,6 +64,8 @@ class PostController extends ApiController
         $post['user'] = $post->user;
         $post['like'] = $post->like;
         $post['comment'] = $post->comment;
+        //dd($post);
+        //$post['img'] = $this->toDataURL($post['mime'], $post['image']);
 
         return $this->showOne($post);
     }

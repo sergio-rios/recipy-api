@@ -26,7 +26,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'description',
-        'photo',
+        'image',
         'enabled',
         'verified',
         'verification_email_token'
@@ -71,6 +71,26 @@ class User extends Authenticatable implements JWTSubject
     public function setEmailAttribute($value)
     {
         $this->attributes['email'] = strtolower($value);
+    }
+
+    public function setImageAttribute($value)
+    {
+        $data = explode(',', $value);
+        $this->attributes['mime'] = $data[0];
+        $this->attributes['image'] = base64_decode($data[1]);
+    }
+
+
+    public function getImageAttribute($value)
+    {
+        if (isset($value)) {
+            $mime = $this->attributes['mime'];
+            $data = base64_encode($value);
+            return $mime.','.$data;
+        }
+        else {
+            return null;
+        }
     }
     
 

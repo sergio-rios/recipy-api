@@ -22,7 +22,8 @@ class CreatePostsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('description');
-            $table->string('photo')->nullable();
+            $table->binary('image')->nullable();
+            $table->string('mime')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')

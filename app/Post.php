@@ -27,9 +27,39 @@ class Post extends Model
     protected $fillable = [
         'title',
         'description',
-        'photo',
+        'image',
+        'mime',
         'user_id'
     ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'mime',
+    ];
+
+    public function setImageAttribute($value)
+    {
+        $data = explode(',', $value);
+        $this->attributes['mime'] = $data[0];
+        $this->attributes['image'] = base64_decode($data[1]);
+    }
+
+
+    public function getImageAttribute($value)
+    {
+        if (isset($value)) {
+            $mime = $this->attributes['mime'];
+            $data = base64_encode($value);
+            return $mime.','.$data;
+        }
+        else {
+            return null;
+        }
+    }
 
 
     /**

@@ -48,7 +48,6 @@ class UserController extends ApiController
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:4|confirmed',
             'description' => 'string',
-            'photo' => 'image|mimes:jpeg,jpg,png|max:10000'
         ]);
 
         $defaultProfile = Profile::where('profile', 'user')->first();
@@ -99,7 +98,7 @@ class UserController extends ApiController
             'email' => 'string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'string|min:4|confirmed',
             'description' => 'string|nullable',
-            'photo' => 'image|nullable|mimes:jpeg,jpg,png|max:10000',
+            'image' => 'nullable',
             'enabled' => 'boolean'
         ]);
         
@@ -109,11 +108,11 @@ class UserController extends ApiController
             $user->password = bcrypt($request->password);
         }
 
-        if ($request->has('email')) {
-            $user->verified = 0;
-            $user->verification_email_token = User::generateEmailToken();
-            event(new UserEmailHasChanged($user));
-        }
+        // if ($request->has('email')) {
+        //     $user->verified = 0;
+        //     $user->verification_email_token = User::generateEmailToken();
+        //     event(new UserEmailHasChanged($user));
+        // }
 
         if (!$user->isDirty()) {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actulizar', 422);

@@ -21,5 +21,15 @@ class UsersTableSeeder extends Seeder
             'verified' => 1,
             'enabled' => '1'
         ]);
+
+        DB::table('users')->insert([
+            'nick' => 'eva12',
+            'profile_id' => 2,
+            'name' => 'eva álvarez',
+            'email' => 'eva@asdf.com',
+            'password' => bcrypt('asdf1234'),
+            'verified' => 1,
+            'enabled' => '1'
+        ]);
     }
 }
