@@ -33,6 +33,8 @@ Route::resource('tag', 'TagController', [
     'only' => ['store', 'index']
 ]);
 
+Route::get('search', 'SearchController@search')->name('search');
+
 Route::get('user/verify-email/{token}', 'UserController@verify')->name('verify');
 Route::get('user/{user}/resend-verification', 'UserController@resend')->name('resend');
 
