@@ -16,7 +16,7 @@ class SearchController extends ApiController
      */
     public function __construct()
     {
-        //$this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
 
     public function search(Request $request)

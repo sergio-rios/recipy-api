@@ -43,7 +43,7 @@ class PostController extends ApiController
         $postData['description'] = $request->description;
         $tags = $request->tags;
 
-        if (isset($postData['image'])) {
+        if ($request->has('image')) {
             $postData['image'] = $request->image;
         }
 

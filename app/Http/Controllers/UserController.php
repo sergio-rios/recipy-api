@@ -136,6 +136,24 @@ class UserController extends ApiController
         return $this->showOne($user);
     }
 
+    public function post(User $user) {
+        $post = $user->post;
+
+        return $this->successResponse($post);
+    }
+
+    public function follower(User $user) {
+        $follower = $user->follower;
+
+        return $this->successResponse($follower);
+    }
+
+    public function following(User $user) {
+        $following = $user->following;
+
+        return $this->successResponse($following);
+    }
+
     /**
      * Verifies the specified resource.
      *

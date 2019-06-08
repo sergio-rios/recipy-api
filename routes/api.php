@@ -17,6 +17,12 @@ Route::resource('user', 'UserController', [
     'except' => ['edit', 'create']
 ]);
 
+Route::prefix('user/{user}')->group(function () {
+    Route::get('post', 'UserController@post')->name('user.post');
+    Route::get('follower', 'UserController@follower')->name('user.follower');
+    Route::get('following', 'UserController@following')->name('user.following');
+});
+
 Route::resource('post', 'PostController', [
     'except' => ['index', 'edit', 'create']
 ]);
@@ -32,6 +38,12 @@ Route::resource('like', 'LikeController', [
 Route::resource('tag', 'TagController', [
     'only' => ['store', 'index']
 ]);
+
+Route::prefix('follow')->group(function () {
+    Route::get('following/{id}', 'FollowController@following')->name('follow.following');
+    Route::post('follow/{id}', 'FollowController@follow')->name('follow.follow');
+    Route::delete('unfollow/{id}', 'FollowController@unfollow')->name('follow.unfollow');
+});
 
 Route::get('search', 'SearchController@search')->name('search');
 

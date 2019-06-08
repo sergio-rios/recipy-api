@@ -38,6 +38,8 @@ class CreateUsersTable extends Migration
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });
+
+        DB::statement("ALTER TABLE `users` CHANGE `image` `image` MEDIUMBLOB NULL DEFAULT NULL;");
     }
 
     /**
