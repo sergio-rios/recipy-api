@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use App\User;
 use App\Profile;
 use Illuminate\Http\Request;
@@ -137,7 +138,9 @@ class UserController extends ApiController
     }
 
     public function post(User $user) {
-        $post = $user->post;
+        $post = Post::where('user_id', $user->id)
+                        ->orderBy('created_at', 'DESC')
+                        ->get();
 
         return $this->successResponse($post);
     }

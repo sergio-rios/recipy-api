@@ -28,7 +28,7 @@ class FollowController extends ApiController
         return $this->successResponse($response);
     }
 
-    public function follow(User $user)
+    public function follow($id)
     {
         DB::insert('INSERT INTO follows (user_id, following) VALUES (:authId, :user);', [
             'authId' => auth()->user()->id,
@@ -38,7 +38,7 @@ class FollowController extends ApiController
         return $this->showMessage('OK', 201);
     }
 
-    public function unfollow(User $user)
+    public function unfollow($id)
     {
         DB::delete('DELETE FROM follows WHERE user_id = :authId AND following = :user;' , [
             'authId' => auth()->user()->id,

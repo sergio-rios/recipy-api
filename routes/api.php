@@ -47,6 +47,8 @@ Route::prefix('follow')->group(function () {
 
 Route::get('search', 'SearchController@search')->name('search');
 
+Route::get('news', 'NewsController@news')->name('news');
+
 Route::get('user/verify-email/{token}', 'UserController@verify')->name('verify');
 Route::get('user/{user}/resend-verification', 'UserController@resend')->name('resend');
 
