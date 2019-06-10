@@ -33,7 +33,7 @@ class AuthController extends ApiController
         if (!isset($user)) {
             return $this->errorResponse('unauthorized_email', 401);
         }
-        elseif ($user->verified) {
+        else {
             if (! $token = auth()->attempt($credentials)) {
                 return $this->errorResponse('unauthorized_pass', 401);
             }
@@ -43,9 +43,6 @@ class AuthController extends ApiController
             $response['user'] = auth()->user();
     
             return $this->successResponse($response);
-        }
-        else {
-            return $this->errorResponse('verified', 403);
         }
     }
 

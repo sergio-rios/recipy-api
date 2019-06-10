@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Recipy</title>
   <style>
-    @import url('https://fonts.googleapis.com/css?family=Varela+Round&display=swap');
+    @import url('https://fonts.googleapis.com/css?family=Quicksand:300,500&display=swap');
 
     * {
       color: #424242;
-      font-family: 'Varela Round', sans-serif;
+      font-family: 'Quicksand', sans-serif;
     }
 
     body {
@@ -26,8 +26,9 @@
       width: 100%;
     }
 
-    a {
+    .verify {
       color: #f3a719;
+      font-size: 1.5rem;
     }
 
     .btn {
@@ -56,13 +57,15 @@
       <h3>Recipy Team</h3>
   </header>
   <main>
-      Hola {{ $user->name }}, <br>
+      Bienvenido {{ explode(' ', $user->name)[0] }}, <br>
       Gracias por crear una cuenta en Recipy. Estás a solo un paso de poder usarla.
-      Para verificar tu cuenta haz clic en el siguiente enlace: <br>
+      <br>Para verificar tu cuenta haz clic en el siguiente enlace: <br>
       
-      <a href="{{ route('verify', ['token' => $user->verification_email_token]) }}">
-        <button class="btn btn1">Verificar e-mail</button>
-      </a>
+      <h2>
+        <a href="{{ route('verify', ['token' => $user->verification_email_token]) }}" class="verify">
+          Verificar e-mail
+        </a>
+      </h2>
 
       <br>
 

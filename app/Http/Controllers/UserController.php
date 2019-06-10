@@ -173,7 +173,7 @@ class UserController extends ApiController
         $user->verification_email_token = null;
         $user->save();
 
-        return $this->showMessage('La cuenta ha sido verificada');
+        return redirect('http://localhost:8080/login');
     }
 
     /**
