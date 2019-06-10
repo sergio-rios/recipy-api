@@ -30,9 +30,11 @@ class UserController extends ApiController
      */
     public function index()
     {
+        $this->authorize(auth()->user());
+
         $users = User::all();
 
-        return $this->showAll($users);
+        return $this->successResponse($users);
     }
 
     /**

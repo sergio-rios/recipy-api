@@ -19,12 +19,17 @@ class UserPolicy
         //
     }
 
-    // public function before($user, $ability)
-    // {
-    //     if ($user->isAdmin()) {
-    //         return true;
-    //     }
-    // }
+    public function before(User $auth, $ability)
+    {
+        if ($auth->isAdmin()) {
+            return true;
+        }
+    }
+
+    public function index(User $auth)
+    {
+        return $auth->isAdmin();
+    }
 
     public function update(User $auth, User $user)
     {

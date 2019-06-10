@@ -39,6 +39,7 @@ class AuthController extends ApiController
             }
     
             $response['token'] = $token;
+            $response['expires'] = auth()->factory()->getTTL() * 60;
             $response['user'] = auth()->user();
     
             return $this->successResponse($response);
@@ -67,22 +68,15 @@ class AuthController extends ApiController
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        try {
+            $response['token'] = auth()->refresh();
+            $response['expires'] = auth()->factory()->getTTL() * 60;
+            $response['user'] = auth()->user();
+        }
+        catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return $this->errorResponse($e->getMessage, 401);
+        }
+        
+        return $this->successResponse($response);
     }
 }
