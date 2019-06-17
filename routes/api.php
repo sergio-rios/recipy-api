@@ -56,3 +56,4 @@ Route::post('login', 'AuthController@login')->name('login')
                                             ->middleware('api');
 
 Route::get('/token/refresh', 'AuthController@refresh')->name('login.refresh');
+
