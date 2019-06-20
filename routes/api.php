@@ -49,6 +49,9 @@ Route::get('search', 'SearchController@search')->name('search');
 
 Route::get('news', 'NewsController@news')->name('news');
 
+Route::get('featured/week', 'FeaturedController@week')->name('featured.week');
+Route::get('featured/month', 'FeaturedController@month')->name('featured.month');
+
 Route::get('user/verify-email/{token}', 'UserController@verify')->name('verify');
 Route::get('user/{user}/resend-verification', 'UserController@resend')->name('resend');
 
