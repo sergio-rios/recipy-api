@@ -147,6 +147,17 @@ class UserController extends ApiController
         return $this->successResponse($post);
     }
 
+    public function pagePost(User $user, $init, $num)
+    {
+        $post = Post::where('user_id', $user->id)
+                        ->orderBy('created_at', 'DESC')
+                        ->offset($init)
+                        ->limit($num)
+                        ->get();
+
+        return $this->successResponse($post);
+    }
+
     public function follower(User $user) {
         $follower = $user->follower;
 
