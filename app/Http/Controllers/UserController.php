@@ -8,6 +8,7 @@ use App\Profile;
 use Illuminate\Http\Request;
 use App\Events\UserWasRegistered;
 use App\Events\UserEmailHasChanged;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -137,6 +138,26 @@ class UserController extends ApiController
         $user->delete();
 
         return $this->showOne($user);
+    }
+
+    public function password(Request $request, User $user)
+    {
+        //$this->authorize($user);
+        
+        $validate = $this->validate($request, [
+            'password_old' => 'required|string|min:4',
+            'password_new' => 'required|string|min:4'
+        ]);
+
+        if (Hash::check($request->password_old, $user->password)) {
+            $user->password = bcrypt($request->password_new);
+            $user->save();
+            
+            return $this->showMessage('OK');
+        }
+        else {
+            return $this->errorResponse('NO', 400);
+        }
     }
 
     public function post(User $user) {

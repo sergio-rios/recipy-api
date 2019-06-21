@@ -18,6 +18,7 @@ Route::resource('user', 'UserController', [
 ]);
 
 Route::prefix('user/{user}')->group(function () {
+    Route::put('password', 'UserController@password')->name('user.password');
     Route::get('post', 'UserController@post')->name('user.post');
     Route::get('post/{init?}/{num?}', 'UserController@pagePost');    
     Route::get('follower', 'UserController@follower')->name('user.follower');
