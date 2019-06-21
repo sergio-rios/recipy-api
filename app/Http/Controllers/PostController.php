@@ -77,9 +77,18 @@ class PostController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $this->authorize('update', $post);
+        
+        $validate = $this->validate($request, [
+            'description' => 'required|string',
+        ]);
+        
+        $post->description = $request->description;
+        $post->save();
+
+        return $this->successResponse($post);
     }
 
     /**
@@ -88,8 +97,11 @@ class PostController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(Post $post)
+    {        
+        $this->authorize('update', $post);
+        $post->delete();
+
+        return $this->successResponse($post);
     }
 }
